@@ -1,0 +1,27 @@
+{
+  "name": "nodejs-rate-limiter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MLAbram/nodejs-rate-limiter.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MLAbram/nodejs-rate-limiter/issues"
+  },
+  "homepage": "https://github.com/MLAbram/nodejs-rate-limiter#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "nodemon": "^2.0.21",
+    "rate-limiter-flexible": "^2.4.1"
+  }
+}
