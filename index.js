@@ -1,25 +1,50 @@
+// https://www.npmjs.com/package/express-rate-limit
+
+
 const express = require('express');
 const app = express();
+const expressLimiter = require('express-rate-limit');
 
-const opts = {
-    points: 6, // 6 points
-    duration: 1, // Per second
-};
-
-const rateLimiter = new RateLimiterMemory(opts);
-
-rateLimiter.consume(remoteAddress, 2) // consume 2 points
-    .then((rateLimiterRes) => {
-        // 2 points consumed
-    })
-    .catch((rateLimiterRes) => {
-        // Not enough points to consume
+const defaultLimiter = expressLimiter({
+  windowMs: 15 * 60 * 1000,  // 15 minutes
+  max: 12,
+  message: 'Too many requests from this IP...'
 });
-    
-app.use(express.json());
+
+const apiLimiter = expressLimiter({
+  windowMs: 15 * 60 * 1000,  // 15 minutes
+  max: 3,
+  message: 'Too many requests from this IP...'
+});
+
+const hbsLimiter = expressLimiter({
+  windowMs: 15 * 60 * 1000,  // 15 minutes
+  max: 3,
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+});
+
+const loginLimiter = expressLimiter({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 3,
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+});
+
+
+app.use(defaultLimiter);
+app.use('/api', apiLimiter);
 
 app.get('/', (req, res) => {
-  return res.status(200).send('Node.js');
+  return res.status(200).send('Home Page');
+});
+
+app.get('/login', (req, res) => {
+  return res.status(200).send('Login Page');
+});
+
+app.get('/api/v1', (req, res) => {
+  return res.status(200).send('API Page');
 });
 
 app.listen(3000, () => {
